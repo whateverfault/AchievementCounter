@@ -8,7 +8,8 @@ public class Data {
 	public string? SteamId { get; set; }
 	public string? AppId { get; set; }
 	public string? Message { get; set; }
-	public string? Layout { get; set; }
+	public int Layout { get; set; }
+	public bool Debugging { get; set; }
 }
 
 internal static class Program
@@ -34,7 +35,7 @@ internal static class Program
 		
 		while (true) {
 			Update();
-			Thread.Sleep(10000);
+			Thread.Sleep(15000);
 		}
 	}
 
@@ -63,10 +64,13 @@ internal static class Program
 
 		if (!firstExecution && !ans.Equals("Y", StringComparison.CurrentCultureIgnoreCase)) {
 			JsonFileUtils.SimpleRead(_dataPath+DATA_FILE_NAME, out _data);
+			ConsoleUtility.Hide();
 			return;
 		}
 
 		JsonFileUtils.SimpleRead<Data>(_dataPath + DATA_FILE_NAME, out var jsonData);
+		
+		_data!.Debugging = jsonData!.Debugging;
 		
 		string? input;
 		do {
@@ -106,9 +110,9 @@ internal static class Program
 						"\n2 - free layout" +
 						"\n3 - foxtailo's layout" +
 						"\nChoose Option:",
-						jsonData?.Layout)?.Replace(" ", "");
+						jsonData?.Layout.ToString())?.Replace(" ", "");
 		} while (!int.TryParse(input, out layout));
-		_data.Layout = layout.ToString();
+		_data.Layout = layout;
 		
 		Console.Clear();
 		
@@ -149,24 +153,28 @@ internal static class Program
 				}
 			}
 
-			var offset = " ";
-			var offsetCount = (_data?.Message?.Length)/2-(count!.ToString().Length+maxCount.ToString().Length)/2 ?? 0;
+			var offset = "";
+			var offsetCount = (_data?.Message?.Length-2)-(count!.ToString().Length+maxCount.ToString().Length+1)/2 ?? 0;
 			for (var i = 0; i < MathF.Abs(offsetCount); i++) {
 				offset += " ";
 			}
 			
 			switch (_data?.Layout) {
-				case "1":
+				case 1:
 					WriteCount($"{count}/{maxCount}{_data.Message}");
 					break;
-				case "2":
+				case 2:
 					WriteCount($"{count}/{maxCount}\n{_data.Message}");
 					break;
-				case "3":
+				case 3:
 					WriteCount($"{(offsetCount > 0? offset : "")}{count}/{maxCount}\n{(offsetCount < 0? offset : "")}{_data.Message}");
 					break;
 			}
-			
+
+			if (_data!.Debugging) {
+				Console.Beep();
+			Console.WriteLine($"{count}/{maxCount} | {_data!.AppId} | {_data.SteamId} | {_data.ApiKey} | {_data.Message}");
+			}
 		}
 		catch (HttpRequestException e)
 		{
