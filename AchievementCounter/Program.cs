@@ -41,8 +41,6 @@ internal static class Program
 	private static void Initialize() {
 		Console.Title = "Achievement Counter";
 		
-		ConsoleUtility.Hide();
-		
 		var firstExecution = !Directory.Exists(_path);
 
 		var ans = string.Empty;
@@ -123,6 +121,8 @@ internal static class Program
 		Console.WriteLine("\nPress any key to continue");
 		
 		Console.ReadKey();
+		
+		ConsoleUtility.Hide();
 	}
 	
 	private static async void Update() {
