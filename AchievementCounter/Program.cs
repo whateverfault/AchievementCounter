@@ -41,6 +41,8 @@ internal static class Program
 	private static void Initialize() {
 		Console.Title = "Achievement Counter";
 		
+		ConsoleUtility.Hide();
+		
 		var firstExecution = !Directory.Exists(_path);
 
 		var ans = string.Empty;
