@@ -57,7 +57,7 @@ internal static class Program
 				break;
 			case false:
 				do {
-					ans = SurveyUtility.Ask($"Do you want to change something? [Y][N][{SKIP_CHAR} - skip]");
+					ans = SurveyUtility.Ask($"Do you want to change something? [Y - yes][N - no][{SKIP_CHAR} - skip]");
 				} while (string.IsNullOrEmpty(ans));
 				
 				break;
