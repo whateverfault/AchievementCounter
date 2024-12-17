@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace AchievementCounter;
+namespace AchievementCounter.Utilities;
 
 public static class JsonFileUtils {
 		private static readonly JsonSerializerSettings _options
